@@ -14,24 +14,24 @@ import { Item } from './interfaces/item.interface';
 export class ItemsController {
   constructor(private readonly itemsService: ItemsService) {}
   @Get()
-  findAll(): Item[] {
+  async findAll(): Promise<Item[]> {
     return this.itemsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id): Item {
+  async findOne(@Param('id') id): Promise<Item> {
     // return `Found item with id ${param.id}`;
     return this.itemsService.findOne(id);
   }
 
   @Post()
-  create(@Body() createItemDto: CreateItemDto): string {
-    return `Name:${createItemDto.name} Desc: ${createItemDto.description}`;
+  async create(@Body() createItemDto: CreateItemDto): Promise<Item> {
+    return await this.itemsService.create(createItemDto);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: number): string {
-    return `successfully deleted ${id}`;
+  async delete(@Param('id') id: number): Promise<Item> {
+    return await this.itemsService.delete(id);
   }
 
   @Put(':id')
