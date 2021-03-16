@@ -7,6 +7,7 @@ import {
   Delete,
   Put,
 } from '@nestjs/common';
+// import {JoiValidationPipe} from '../pipes/Joivalidator.pipe';
 import CreateItemDto from './dto/create-item.dto';
 import { ItemsService } from './items.service';
 import { Item } from './interfaces/item.interface';
@@ -20,11 +21,11 @@ export class ItemsController {
 
   @Get(':id')
   async findOne(@Param('id') id): Promise<Item> {
-    // return `Found item with id ${param.id}`;
     return this.itemsService.findOne(id);
   }
 
   @Post()
+  // @UsePipes(new JoiValidationPipe(createCatSchema))
   async create(@Body() createItemDto: CreateItemDto): Promise<Item> {
     return await this.itemsService.create(createItemDto);
   }
