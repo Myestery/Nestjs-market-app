@@ -1,3 +1,5 @@
+import { ObjectIdErrorFilter } from './shared/objectId-error.filter';
+import { HttpErrorFilter } from './shared/http-error.filter';
 import { AuthModule } from './auth/auth.module';
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth/auth.service';
@@ -12,6 +14,7 @@ import config from './config/keys';
 import { ItemsModule } from './items/items.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
+import { APP_FILTER } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -32,6 +35,18 @@ import { UsersModule } from './users/users.module';
     UsersModule,
   ],
   controllers: [AppController],
-  providers: [AppService, AuthService, LocalStrategy],
+  providers: [
+    AppService,
+    AuthService,
+    LocalStrategy,
+    {
+      provide: APP_FILTER,
+      useClass: HttpErrorFilter,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: ObjectIdErrorFilter,
+    },
+  ],
 })
 export class AppModule {}

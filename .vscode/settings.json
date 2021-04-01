@@ -1,10 +1,12 @@
 {
     "editor.formatOnSave": true,
     "files.autoSave": "afterDelay",
-    "files.autoSaveDelay": 5000,
+    "files.autoSaveDelay": 9000,
     "editor.formatOnType": true,
     "javascript.format.placeOpenBraceOnNewLineForControlBlocks": true,
     "javascript.format.placeOpenBraceOnNewLineForFunctions": true,
     "typescript.format.placeOpenBraceOnNewLineForFunctions": true,
-    "typescript.format.placeOpenBraceOnNewLineForControlBlocks": true
+    "typescript.format.placeOpenBraceOnNewLineForControlBlocks": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnPaste": true
 }

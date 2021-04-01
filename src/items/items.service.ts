@@ -10,7 +10,7 @@ export class ItemsService {
     return await this.ItemModel.find();
   }
   async findOne(id: string): Promise<Item> {
-    return this.ItemModel.findById(id);
+    return await this.ItemModel.findById(id);
   }
   async create(item: CreateItemDto): Promise<Item> {
     const newItem = new this.ItemModel(item);
