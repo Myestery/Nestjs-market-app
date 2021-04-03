@@ -31,7 +31,7 @@ export class ItemsController {
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: number): Promise<Item> {
+  async delete(@Param('id') id: string): Promise<Item> {
     return await this.itemsService.delete(id);
   }
 
