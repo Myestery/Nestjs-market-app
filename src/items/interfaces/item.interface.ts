@@ -6,4 +6,3 @@ export interface Item extends Document {
   qty: number;
 }
 
-// export interface ItemModel extends Item, Document {}

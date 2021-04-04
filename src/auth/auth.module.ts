@@ -18,10 +18,15 @@ import config from '../config/keys';
       secret: config.secret,
       signOptions: { expiresIn: '60s' },
     }),
-    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }])
+    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
-  exports: [AuthService, JwtModule, PassportModule],
+  exports: [
+    AuthService,
+    JwtModule,
+    PassportModule,
+    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
+  ],
   controllers: [AuthController],
 })
 export class AuthModule {}

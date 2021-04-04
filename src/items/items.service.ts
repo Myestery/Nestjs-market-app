@@ -1,4 +1,4 @@
-import { Injectable, Res, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Item } from './interfaces/item.interface';
 import { Model, ObjectId } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
@@ -23,7 +23,7 @@ export class ItemsService {
   async delete(id: string): Promise<Item> {
     let deleted = await this.ItemModel.findByIdAndRemove(id);
     if (deleted) {
-      return deleted;
+      return deleted; 
     }
     throw new HttpException('not found', 404);
   }

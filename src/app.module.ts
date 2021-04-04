@@ -19,13 +19,12 @@ import { APP_FILTER } from '@nestjs/core';
 @Module({
   imports: [
     ItemsModule,
-    UsersModule,
+    AuthModule,
     PassportModule,
     JwtModule.register({
       secret: config.secret,
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '6000s' },
     }),
-    AuthModule,
     MongooseModule.forRoot(config.mongoURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
