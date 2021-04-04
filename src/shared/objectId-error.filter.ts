@@ -1,9 +1,9 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
 
 interface ObjectIdError {
-  stringValue?: string;
+  stringValue: string;
   kind: string;
-  value?: string;
+  value: string;
   path: string;
 }
 @Catch()
@@ -18,7 +18,7 @@ export class ObjectIdErrorFilter implements ExceptionFilter {
       timestamp: new Date().toLocaleDateString(),
       path: request.url,
       method: request.method,
-      message: 'Not Found'
+      message: exception.value,
     };
     response.status(status).json(errorResponse);
   }

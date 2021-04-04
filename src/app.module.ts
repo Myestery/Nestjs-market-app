@@ -39,14 +39,14 @@ import { APP_FILTER } from '@nestjs/core';
     AppService,
     AuthService,
     LocalStrategy,
-    {
-      provide: APP_FILTER,
-      useClass: HttpErrorFilter,
-    },
-    {
-      provide: APP_FILTER,
-      useClass: ObjectIdErrorFilter,
-    },
+    // {
+    //   provide: APP_FILTER,
+    //   useClass: HttpErrorFilter,
+    // },
+    // {
+    //   provide: APP_FILTER,
+    //   useClass: ObjectIdErrorFilter,
+    // },
   ],
 })
 export class AppModule {}

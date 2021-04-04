@@ -1,6 +1,6 @@
-import { Injectable, Res, HttpException } from '@nestjs/common';
+import { Injectable, Res, HttpException, HttpStatus } from '@nestjs/common';
 import { Item } from './interfaces/item.interface';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import CreateItemDto from './dto/create-item.dto';
 @Injectable()
@@ -9,8 +9,12 @@ export class ItemsService {
   async findAll(): Promise<Item[]> {
     return await this.ItemModel.find();
   }
-  async findOne(id: string): Promise<Item> {
-    return await this.ItemModel.findById(id);
+  async findOne(id: ObjectId): Promise<Item> {
+    let item = await this.ItemModel.findById(id);
+    if (!item) {
+      throw new HttpException('not found', HttpStatus.NOT_FOUND);
+    }
+    return item;
   }
   async create(item: CreateItemDto): Promise<Item> {
     const newItem = new this.ItemModel(item);
@@ -18,10 +22,9 @@ export class ItemsService {
   }
   async delete(id: string): Promise<Item> {
     let deleted = await this.ItemModel.findByIdAndRemove(id);
-    if (deleted)
-    {
-      return deleted
+    if (deleted) {
+      return deleted;
     }
-      throw new HttpException("not found",404);
+    throw new HttpException('not found', 404);
   }
 }
