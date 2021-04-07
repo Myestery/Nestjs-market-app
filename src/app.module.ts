@@ -23,7 +23,7 @@ import { APP_FILTER } from '@nestjs/core';
     PassportModule,
     JwtModule.register({
       secret: config.secret,
-      signOptions: { expiresIn: '6000s' },
+      signOptions: { expiresIn: '2d' },
     }),
     MongooseModule.forRoot(config.mongoURI, {
       useNewUrlParser: true,

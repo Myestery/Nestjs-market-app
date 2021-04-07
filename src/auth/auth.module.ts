@@ -16,7 +16,7 @@ import config from '../config/keys';
     PassportModule,
     JwtModule.register({
       secret: config.secret,
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '2d' },
     }),
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
   ],

@@ -30,17 +30,31 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
-    Logger.log(user['_doc']);
+  async login(userDoc: any) {
+    const { _doc: user } = userDoc;
     const payload = {
-      username: user['_doc'].userName,
-      id: user['_doc']['_id'],
+      username: user.userName,
+      id: user._id,
+      meta: user.name,
     };
     return {
       access_token: this.jwtService.sign(payload),
     };
   }
   async createUser(registrationForm: CreateUserDto) {
+    // check if the username exists first
+    const username_exists: boolean = (await this.UserModel.findOne({
+      userName: registrationForm.userName,
+    }))
+      ? true
+      : false;
+    if (username_exists) {
+      throw new HttpException(
+        'UserName Exists',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+
     // encrypt password
     let salt = bcrypt.genSaltSync(10);
     let hash = bcrypt.hashSync(registrationForm.password, salt);
@@ -52,6 +66,7 @@ export class AuthService {
       password: hash,
       userName: registrationForm.userName,
     };
+
     const newUser = new this.UserModel(user);
     return await newUser.save();
   }
