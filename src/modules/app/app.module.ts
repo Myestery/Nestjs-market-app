@@ -1,24 +1,20 @@
-import { ObjectIdErrorFilter } from './shared/objectId-error.filter';
-import { HttpErrorFilter } from './shared/http-error.filter';
-import { AuthModule } from './auth/auth.module';
-import { Module } from '@nestjs/common';
-import { AuthService } from './auth/auth.service';
+import { Module, MiddlewareConsumer } from '@nestjs/common';
+import { AuthService } from '../../modules/auth/auth.service';
 import { PassportModule } from '@nestjs/passport';
-import { LocalStrategy } from './auth/local.strategy';
+import { LocalStrategy } from '../../modules/auth/local.strategy';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { JwtModule } from '@nestjs/jwt';
-import config from './config/keys';
-// import { ItemsController } from './items/items.controller';
-// import { ItemsService } from './items/items.service';
-import { ItemsModule } from './items/items.module';
+import config from '../../config/keys'
 import { MongooseModule } from '@nestjs/mongoose';
-import { UsersModule } from './users/users.module';
-import { APP_FILTER } from '@nestjs/core';
+import { ItemsModule } from '../../modules/items/items.module';
+import { AuthModule } from '../../modules/auth/auth.module';
+import { UsersModule } from '../../modules/users/users.module';
+import { AuthMiddleware } from 'src/common/middleware/auth.middleware';
 
 @Module({
   imports: [
-    ItemsModule,
+ItemsModule,
     AuthModule,
     PassportModule,
     JwtModule.register({
@@ -48,4 +44,10 @@ import { APP_FILTER } from '@nestjs/core';
     // },
   ],
 })
-export class AppModule {}
+export class AppModule {
+    configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthMiddleware)
+      .forRoutes('items');
+  }
+}

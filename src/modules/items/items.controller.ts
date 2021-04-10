@@ -6,14 +6,13 @@ import {
   Param,
   Delete,
   Put,
-  HttpException,
-  HttpStatus,
 } from '@nestjs/common';
 // import {JoiValidationPipe} from '../pipes/Joivalidator.pipe';
 import CreateItemDto from './dto/create-item.dto';
 import { ItemsService } from './items.service';
 import { Item } from './interfaces/item.interface';
-import { isValidObjectId, ObjectId } from 'mongoose';
+import { ObjectId } from 'mongoose';
+import { ObjectIdPipe } from '../../common/pipes/object-id.pipe';
 @Controller('items')
 export class ItemsController {
   constructor(private readonly itemsService: ItemsService) {}
@@ -23,11 +22,8 @@ export class ItemsController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: ObjectId): Promise<Item> {
-    if (isValidObjectId(id)) {
-      return this.itemsService.findOne(id);
-    }
-    throw new HttpException('Item not found', HttpStatus.NOT_FOUND);
+  async findOne(@Param('id', ObjectIdPipe) id: ObjectId): Promise<Item> {
+    return this.itemsService.findOne(id);
   }
 
   @Post()
