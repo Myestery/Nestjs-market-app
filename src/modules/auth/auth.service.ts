@@ -6,6 +6,7 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import CreateUserDto from './dto/create-user.dto';
 import config from '../../config/keys';
+import JwtPayload from './dto/jwt-payload.dto';
 const bcrypt = require('bcryptjs');
 
 @Injectable()
@@ -33,13 +34,15 @@ export class AuthService {
 
   async login(userDoc: any) {
     const { _doc: user } = userDoc;
-    const payload = {
+    const payload: JwtPayload= {
       username: user.userName,
       id: user._id,
       meta: user.name,
     };
+    let access_token = this.jwtService.sign(payload);
+    // Logger.log(this.jwtService.decode(access_token));
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token,
     };
   }
   async createUser(registrationForm: CreateUserDto) {
@@ -80,17 +83,14 @@ export class AuthService {
       throw new HttpException('User Not found', HttpStatus.NOT_FOUND);
     }
   }
-  async getUserFromToken(token: string) {
+  async getUserFromToken(token: string){
     if (
-      token
-        ? this.jwtService.verify(token, {
-            secret: config.secret,
-          })
-        : null
-    ) {
-      return this.jwtService.decode(token, {
-        complete: true,
-      });
+      this.jwtService.verify(token, {
+        secret: config.secret,
+      })
+    )
+    {
+      return this.jwtService.decode(token);
     }
   }
 }

@@ -46,6 +46,6 @@ import { AuthMiddleware } from 'src/common/middleware/auth.middleware';
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes('items');
+    consumer.apply(AuthMiddleware).forRoutes('*');
   }
 }
