@@ -8,7 +8,7 @@ export class AuthMiddleware implements NestMiddleware {
     let auth = req.headers.authorization;
     let token =
       req.headers.authorization == undefined ? '' : auth.replace(/Bearer /, '');
-    let user = await this.authService.getUserFromToken(token);
+    let user = token ? await this.authService.getUserFromToken(token) : false;
     if (!user) {
       next();
       return;
