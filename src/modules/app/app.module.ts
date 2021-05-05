@@ -5,7 +5,7 @@ import { LocalStrategy } from '../../modules/auth/local.strategy';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { JwtModule } from '@nestjs/jwt';
-import config from '../../config/keys'
+import config from '../../config/keys';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ItemsModule } from '../../modules/items/items.module';
 import { AuthModule } from '../../modules/auth/auth.module';
@@ -14,7 +14,7 @@ import { AuthMiddleware } from 'src/common/middleware/auth.middleware';
 
 @Module({
   imports: [
-ItemsModule,
+    ItemsModule,
     AuthModule,
     PassportModule,
     JwtModule.register({
@@ -45,9 +45,7 @@ ItemsModule,
   ],
 })
 export class AppModule {
-    configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AuthMiddleware)
-      .forRoutes('items');
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes('items');
   }
 }

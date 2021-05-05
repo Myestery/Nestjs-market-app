@@ -5,6 +5,7 @@ import { Injectable, Logger, HttpStatus, HttpException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import CreateUserDto from './dto/create-user.dto';
+import config from '../../config/keys';
 const bcrypt = require('bcryptjs');
 
 @Injectable()
@@ -77,6 +78,19 @@ export class AuthService {
       return user;
     } else {
       throw new HttpException('User Not found', HttpStatus.NOT_FOUND);
+    }
+  }
+  async getUserFromToken(token: string) {
+    if (
+      token
+        ? this.jwtService.verify(token, {
+            secret: config.secret,
+          })
+        : null
+    ) {
+      return this.jwtService.decode(token, {
+        complete: true,
+      });
     }
   }
 }
