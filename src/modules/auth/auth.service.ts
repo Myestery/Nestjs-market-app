@@ -2,7 +2,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './interfaces/user.interface';
 import { Injectable, Logger, HttpStatus, HttpException } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import CreateUserDto from './dto/create-user.dto';
 import config from '../../config/keys';
@@ -12,7 +11,6 @@ const bcrypt = require('bcryptjs');
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
     private jwtService: JwtService,
     @InjectModel('User') private UserModel: Model<User>,
   ) {}
@@ -34,7 +32,7 @@ export class AuthService {
 
   async login(userDoc: any) {
     const { _doc: user } = userDoc;
-    const payload: JwtPayload= {
+    const payload: JwtPayload = {
       username: user.userName,
       id: user._id,
       meta: user.name,
@@ -83,14 +81,23 @@ export class AuthService {
       throw new HttpException('User Not found', HttpStatus.NOT_FOUND);
     }
   }
-  async getUserFromToken(token: string){
+  async getUserFromToken(token: string) {
     if (
       this.jwtService.verify(token, {
         secret: config.secret,
       })
-    )
-    {
+    ) {
       return this.jwtService.decode(token);
     }
+  }
+  async verify(userPayload: JwtPayload): Promise<Boolean> {
+    let updated = await this.UserModel.findByIdAndUpdate(userPayload.id, {
+      verified: true,
+    });
+    return !!updated;
+  }
+  async checkVerification(userPayload: JwtPayload)
+  {
+    return (await this.findOne(userPayload.username)).verified
   }
 }

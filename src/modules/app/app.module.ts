@@ -1,3 +1,4 @@
+import { UsersController } from './../auth/users.controller';
 import { Module, MiddlewareConsumer } from '@nestjs/common';
 import { AuthService } from '../../modules/auth/auth.service';
 import { PassportModule } from '@nestjs/passport';
@@ -9,7 +10,6 @@ import config from '../../config/keys';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ItemsModule } from '../../modules/items/items.module';
 import { AuthModule } from '../../modules/auth/auth.module';
-import { UsersModule } from '../../modules/users/users.module';
 import { AuthMiddleware } from 'src/common/middleware/auth.middleware';
 
 @Module({
@@ -27,9 +27,8 @@ import { AuthMiddleware } from 'src/common/middleware/auth.middleware';
       useFindAndModify: false,
       useCreateIndex: true,
     }),
-    UsersModule,
   ],
-  controllers: [AppController],
+  controllers: [UsersController, AppController],
   providers: [
     AppService,
     AuthService,
